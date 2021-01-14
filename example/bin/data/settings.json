@@ -1,0 +1,29 @@
+{
+	"vertex" : [
+		"point_sprite.vert"
+	],
+	"fragment" : [
+		"mono_color.frag"
+	],
+	"uniform" : {
+		"point_size" : {
+			"type" : "float",
+			"value" : 1,
+			"imgui" : {
+				"type" : "drag",
+				"speed" : 1,
+				"min" : 0,
+				"max" : 100
+			}
+		},
+		"color" : {
+			"type" : "color",
+			"value" : [1,1,1,1],
+			"imgui" : {}
+		}
+	},
+	"gl_state_bool" : {
+		"point_size" : true,
+		"point_sprite" : true
+	}
+}
