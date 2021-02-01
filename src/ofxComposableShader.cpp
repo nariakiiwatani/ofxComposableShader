@@ -41,7 +41,8 @@ void Shader::reload()
 			continue;
 		}
 		ofTexture tex;
-		if(ofLoadImage(tex, t.second["value"])) {
+		std::string filename = t.second["value"];
+		if(ofLoadImage(tex, filename)) {
 			textures_.insert(make_pair(t.first, tex));
 		}
 	}
