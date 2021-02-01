@@ -31,6 +31,20 @@ inline bool ofxComposableShader::gui()
 			}
 			continue;
 		}
+		else if(gui_type == "combo") {
+			int v = value;
+			std::vector<std::string> item = gui["item"];
+			if(BeginCombo(name.c_str(), item.size() > v ? item[v].c_str() : nullptr)) {
+				for(int i = 0; i < item.size(); ++i) {
+					if(Selectable(item[i].c_str(), i == v)) {
+						value = i;
+						ret |= true;
+					}
+				}
+				EndCombo();
+			}
+			continue;
+		}
 		float v_speed = findGet(gui, "speed", 1.f);
 		float v_step = findGet(gui, "step", 0.f);
 		float v_step_fast = findGet(gui, "stepFast", 0.f);
