@@ -60,8 +60,8 @@ void Shader::begin(int &uniform_texture_location) const
 		auto &&value = u.second["value"];
 		if(type == "float") { setUniform1f(name, value); }
 		else if(type == "vec2") { setUniform2f(name, value[0], value[1]); }
-		else if(type == "vec3" || type == "color3") { setUniform3f(name, value[0], value[1], value[2]); }
-		else if(type == "vec4" || type == "color" || type == "color4") { setUniform4f(name, value[0], value[1], value[2], value[3]); }
+		else if(type == "vec3") { setUniform3f(name, value[0], value[1], value[2]); }
+		else if(type == "vec4") { setUniform4f(name, value[0], value[1], value[2], value[3]); }
 		else if(type == "mat3") { setUniformMatrix3f(name, glm::mat3(value[0].get<float>(), value[1].get<float>(), value[2].get<float>(), value[3].get<float>(), value[4].get<float>(), value[5].get<float>(), value[6].get<float>(), value[7].get<float>(), value[8].get<float>())); }
 		else if(type == "mat4") { setUniformMatrix4f(name, glm::mat4(value[0].get<float>(), value[1].get<float>(), value[2].get<float>(), value[3].get<float>(), value[4].get<float>(), value[5].get<float>(), value[6].get<float>(), value[7].get<float>(), value[8].get<float>(), value[9].get<float>(), value[10].get<float>(), value[11].get<float>(), value[12].get<float>(), value[13].get<float>(), value[14].get<float>(), value[15].get<float>())); }
 		else if(type == "int") { setUniform1i(name, value); }

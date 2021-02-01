@@ -20,20 +20,11 @@ inline bool ofxComposableShader::gui()
 		auto &&type = u.second["type"];
 		auto &&value = u.second["value"];
 		auto &&gui = u.second["imgui"];
-		if(type == "color" || type == "color4") {
+		auto gui_type = gui.find("type") == std::end(gui) ? "typical" : gui["type"];
+		if(gui_type == "color") {
 			std::vector<float> v = value;
-			if(ColorEdit4(name.c_str(), v.data())) {
-				for(int i = 0; i < 4; ++i) {
-					value[i] = v[i];
-				}
-				ret |= true;
-			}
-			continue;
-		}
-		else if(type == "color3") {
-			std::vector<float> v = value;
-			if(ColorEdit3(name.c_str(), v.data())) {
-				for(int i = 0; i < 3; ++i) {
+			if(type=="vec3" ? ColorEdit3(name.c_str(), v.data()) : ColorEdit4(name.c_str(), v.data())) {
+				for(int i = 0; i < value.size(); ++i) {
 					value[i] = v[i];
 				}
 				ret |= true;
@@ -63,7 +54,6 @@ inline bool ofxComposableShader::gui()
 		else if(type == "vec4" || type == "ivec4") { num_components = 4; }
 		else if(type == "mat3") { num_components = 9; }
 		else if(type == "mat4") { num_components = 16; }
-		auto &&gui_type = gui["type"];
 		
 		auto makeFloatVector = [num_components](const ofJson &json) {
 			return num_components > 1 ? json.get<std::vector<float>>() : std::vector<float>{json};
@@ -91,25 +81,7 @@ inline bool ofxComposableShader::gui()
 				json = value[0];
 			}
 		};
-		if(gui_type == "drag") {
-			switch(data_type) {
-				case ImGuiDataType_Float: {
-					auto v = makeFloatVector(value);
-					if(DragScalarN(name.c_str(), data_type, v.data(), num_components, v_speed, &v_min, &v_max, format.c_str(), power)) {
-						restoreFloatVector(value, v);
-						ret |= true;
-					}
-				}	break;
-				case ImGuiDataType_S32: {
-					auto v = makeIntVector(value);
-					if(DragScalarN(name.c_str(), data_type, v.data(), num_components, v_speed, &v_min, &v_max, format.c_str(), power)) {
-						restoreIntVector(value, v);
-						ret |= true;
-					}
-				}	break;
-			}
-		}
-		else if(gui_type == "slider") {
+		if(gui_type == "slider") {
 			switch(data_type) {
 				case ImGuiDataType_Float: {
 					auto v = makeFloatVector(value);
@@ -164,6 +136,25 @@ inline bool ofxComposableShader::gui()
 				}	break;
 			}
 		}
+		else /*if(gui_type == "drag")*/ {	// fallback
+			switch(data_type) {
+				case ImGuiDataType_Float: {
+					auto v = makeFloatVector(value);
+					if(DragScalarN(name.c_str(), data_type, v.data(), num_components, v_speed, &v_min, &v_max, format.c_str(), power)) {
+						restoreFloatVector(value, v);
+						ret |= true;
+					}
+				}	break;
+				case ImGuiDataType_S32: {
+					auto v = makeIntVector(value);
+					if(DragScalarN(name.c_str(), data_type, v.data(), num_components, v_speed, &v_min, &v_max, format.c_str(), power)) {
+						restoreIntVector(value, v);
+						ret |= true;
+					}
+				}	break;
+			}
+		}
+
 	}
 	return ret;
 }
