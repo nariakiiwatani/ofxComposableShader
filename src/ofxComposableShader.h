@@ -28,6 +28,8 @@ public:
 	void begin() const;
 	void begin(int &uniform_texture_location) const;
 	void end() const;
+
+	const std::map<std::string, ofJson>& getUniforms() const { return settings_.uniform; }
 	
 	bool gui();
 	
