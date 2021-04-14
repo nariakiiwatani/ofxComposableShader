@@ -15,7 +15,6 @@ class Shader : public ofShader
 public:
 	struct Settings {
 		std::vector<std::string> vertex, geometry, fragment, compute;
-		std::map<std::string, bool> gl_state_bool;
 		std::map<std::string, ofJson> gl_state;
 		std::map<std::string, ofJson> uniform;
 		void loadJson(const ofJson&);

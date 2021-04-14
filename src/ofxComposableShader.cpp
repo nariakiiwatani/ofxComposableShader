@@ -78,16 +78,14 @@ void Shader::begin(int &uniform_texture_location) const
 			cache ? glEnable(cap) : glDisable(cap);
 		};
 	};
-	for(auto &&state : settings_.gl_state_bool) {
+	for(auto &&state : settings_.gl_state) {
 		if(state.first == "point_size") {
 			gl_state_restores_.emplace_back(pushGLBoolState(GL_PROGRAM_POINT_SIZE, state.second));
 		}
-		if(state.first == "point_sprite") {
+		else if(state.first == "point_sprite") {
 			gl_state_restores_.emplace_back(pushGLBoolState(GL_POINT_SPRITE, state.second));
 		}
-	}
-	for(auto &&state : settings_.gl_state) {
-		if(state.first == "blend_equation") {
+		else if(state.first == "blend_equation") {
 			GLint prev_blend_eq_rgb, prev_blend_eq_alpha;
 			glGetIntegerv(GL_BLEND_EQUATION_RGB, &prev_blend_eq_rgb);
 			glGetIntegerv(GL_BLEND_EQUATION_ALPHA, &prev_blend_eq_alpha);

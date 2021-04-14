@@ -22,7 +22,7 @@
 			"imgui" : {}
 		}
 	},
-	"gl_state_bool" : {
+	"gl_state" : {
 		"point_size" : true,
 		"point_sprite" : true
 	}
