@@ -86,6 +86,17 @@ void Shader::begin(int &uniform_texture_location) const
 			gl_state_restores_.emplace_back(pushGLBoolState(GL_POINT_SPRITE, state.second));
 		}
 	}
+	for(auto &&state : settings_.gl_state) {
+		if(state.first == "blend_equation") {
+			GLint prev_blend_eq_rgb, prev_blend_eq_alpha;
+			glGetIntegerv(GL_BLEND_EQUATION_RGB, &prev_blend_eq_rgb);
+			glGetIntegerv(GL_BLEND_EQUATION_ALPHA, &prev_blend_eq_alpha);
+			glBlendEquation(state.second);
+			gl_state_restores_.emplace_back([prev_blend_eq_rgb, prev_blend_eq_alpha]() {
+				glBlendEquationSeparate(prev_blend_eq_rgb, prev_blend_eq_alpha);
+			});
+		}
+	}
 }
 
 void Shader::end() const
