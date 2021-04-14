@@ -36,6 +36,7 @@ public:
 private:
 	Settings settings_;
 	std::map<std::string, ofTexture> textures_;
+	mutable std::vector<std::function<void()>> gl_state_restores_; 
 };
 }}
 

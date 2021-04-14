@@ -71,25 +71,28 @@ void Shader::begin(int &uniform_texture_location) const
 		else if(type == "ivec4") { setUniform4i(name, value[0], value[1], value[2], value[3]); }
 		else if(type == "texture") { setUniformTexture(name, textures_.find(name)->second, uniform_texture_location++); }
 	}
+	auto pushGLBoolState = [&](GLenum cap, bool value) {
+		auto cache = glIsEnabled(cap);
+		value ? glEnable(cap) : glDisable(cap);
+		return [cap, cache]() {
+			cache ? glEnable(cap) : glDisable(cap);
+		};
+	};
 	for(auto &&state : settings_.gl_state_bool) {
 		if(state.first == "point_size") {
-			state.second ? glEnable(GL_PROGRAM_POINT_SIZE) : glDisable(GL_PROGRAM_POINT_SIZE);
+			gl_state_restores_.emplace_back(pushGLBoolState(GL_PROGRAM_POINT_SIZE, state.second));
 		}
 		if(state.first == "point_sprite") {
-			state.second ? glEnable(GL_POINT_SPRITE) : glDisable(GL_POINT_SPRITE);
+			gl_state_restores_.emplace_back(pushGLBoolState(GL_POINT_SPRITE, state.second));
 		}
 	}
 }
 
 void Shader::end() const
 {
-	for(auto &&state : settings_.gl_state_bool) {
-		if(state.first == "point_size") {
-			glDisable(GL_PROGRAM_POINT_SIZE);
-		}
-		if(state.first == "point_sprite") {
-			glDisable(GL_POINT_SPRITE);
-		}
+	for(auto &&restore : gl_state_restores_) {
+		restore();
 	}
+	gl_state_restores_.clear();
 	ofShader::end();
 }
