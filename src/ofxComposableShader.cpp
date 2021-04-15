@@ -83,7 +83,9 @@ void Shader::begin(int &uniform_texture_location) const
 			gl_state_restores_.emplace_back(pushGLBoolState(GL_PROGRAM_POINT_SIZE, state.second));
 		}
 		else if(state.first == "point_sprite") {
-			gl_state_restores_.emplace_back(pushGLBoolState(GL_POINT_SPRITE, state.second));
+			if(!ofIsGLProgrammableRenderer()) {
+				gl_state_restores_.emplace_back(pushGLBoolState(GL_POINT_SPRITE, state.second));
+			}
 		}
 		else if(state.first == "blend_equation") {
 			GLint prev_blend_eq_rgb, prev_blend_eq_alpha;
