@@ -18,6 +18,7 @@ public:
 		std::map<std::string, ofJson> gl_state;
 		std::map<std::string, ofJson> uniform;
 		void loadJson(const ofJson&);
+		const ofJson toJson() const;
 	};
 	void setup(const Settings &settings) {
 		settings_ = settings;
@@ -30,7 +31,7 @@ public:
 	void end() const;
 
 	const std::map<std::string, ofJson>& getUniforms() const { return settings_.uniform; }
-	
+	const Settings& getSettings() const { return settings_; }
 	bool gui();
 	
 private:
