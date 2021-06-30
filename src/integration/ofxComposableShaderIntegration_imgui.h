@@ -17,7 +17,7 @@ inline bool ofxComposableShader::gui()
 			continue;
 		}
 		auto &&name = u.first;
-		auto &&type = u.second["type"];
+		auto &&type = u.second["type"].get<std::string>();
 		auto &&value = u.second["value"];
 		auto &&gui = u.second["imgui"];
 		auto gui_type = gui.find("type") == std::end(gui) ? "typical" : gui["type"];
@@ -50,7 +50,7 @@ inline bool ofxComposableShader::gui()
 		float v_step_fast = findGet(gui, "stepFast", 0.f);
 		float v_min = findGet(gui, "min", 0.f);
 		float v_max = findGet(gui, "max", v_min);
-		std::string format = findGet(gui, "format", "%.3f");
+		std::string format = findGet(gui, "format", type[0] == 'i' ? "%d" : "%.3f");
 		float power = findGet(gui, "power", 1.f);
 		
 		ImGuiDataType data_type;
