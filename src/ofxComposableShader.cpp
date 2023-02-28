@@ -27,7 +27,11 @@ void Shader::reload()
 		}
 	};
 	unload();
+	
+	auto log_level = ofGetLogLevel();
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 	setupShaderFromSource(GL_VERTEX_SHADER, "");
+	ofSetLogLevel(log_level);
 	
 	attachShaders(*this, GL_VERTEX_SHADER, s.vertex);
 	attachShaders(*this, GL_GEOMETRY_SHADER, s.geometry);
